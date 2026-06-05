@@ -755,6 +755,57 @@ footer p { font-size:12px; color:rgba(255,255,255,0.25); }
   })();
 </script>
 
+<!-- DEMO SLIDESHOW -->
+<section style="background:var(--offwhite); text-align:center; padding:60px 48px;">
+  <div style="max-width:900px; margin:0 auto;">
+    <span class="section-label">App Preview</span>
+    <h2 class="section-title" style="margin-bottom:36px">See Demo</h2>
+    <div style="position:relative; display:flex; align-items:center; gap:16px;">
+      <button id="demoPrevBtn" style="flex-shrink:0; width:44px; height:44px; border-radius:50%; border:none; background:var(--navy); color:var(--white); font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:.2s; box-shadow:0 4px 16px rgba(0,0,0,0.15);">&#8592;</button>
+      <div style="flex:1; overflow:hidden; border-radius:var(--radius); box-shadow:0 12px 48px rgba(15,22,40,0.12);">
+        <a id="demoSlideLink" href="demo-student-app.png" target="_blank" rel="noopener">
+          <img id="demoSlideImg" src="demo-student-app.png" alt="Demo Student App" style="width:100%; display:block; cursor:zoom-in;">
+        </a>
+      </div>
+      <button id="demoNextBtn" style="flex-shrink:0; width:44px; height:44px; border-radius:50%; border:none; background:var(--navy); color:var(--white); font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:.2s; box-shadow:0 4px 16px rgba(0,0,0,0.15);">&#8594;</button>
+    </div>
+    <div id="demoDots" style="display:flex; justify-content:center; gap:8px; margin-top:16px; flex-wrap:wrap;"></div>
+  </div>
+</section>
+<script>
+  (function(){
+    var demos = ["demo-student-app.png","demo-admin-panel.png","demo-verification-gate.png","demo-onboarding.png","demo-city-guide.png","demo-discount-locker.png","demo-connect.png","demo-events.png","demo-insider.png","demo-overview.png"];
+    var demoAlts = ["Student App","Admin Panel","Verification Gate","Onboarding","City Guide","Discount Locker","Connect","Events","Insider","Overview"];
+    var demoCurrent = 0;
+    var demoImg = document.getElementById("demoSlideImg");
+    var demoLink = document.getElementById("demoSlideLink");
+    var demoDots = document.getElementById("demoDots");
+    demos.forEach(function(s, i) {
+      var dot = document.createElement("span");
+      dot.className = "demo-dot";
+      dot.setAttribute("data-index", i);
+      dot.style.cssText = "width:10px;height:10px;border-radius:50%;background:" + (i === 0 ? "var(--orange)" : "var(--muted)") + ";cursor:pointer;transition:.2s;";
+      dot.addEventListener("click", function() { showDemo(parseInt(this.getAttribute("data-index"))); });
+      demoDots.appendChild(dot);
+    });
+    function showDemo(i) {
+      demoCurrent = i;
+      demoImg.src = demos[i];
+      demoImg.alt = demoAlts[i];
+      demoLink.href = demos[i];
+      document.querySelectorAll(".demo-dot").forEach(function(d, idx) {
+        d.style.background = idx === i ? "var(--orange)" : "var(--muted)";
+      });
+    }
+    document.getElementById("demoPrevBtn").addEventListener("click", function() {
+      showDemo((demoCurrent - 1 + demos.length) % demos.length);
+    });
+    document.getElementById("demoNextBtn").addEventListener("click", function() {
+      showDemo((demoCurrent + 1) % demos.length);
+    });
+  })();
+</script>
+
 <!-- FOOTER -->
 <footer>
   <a class="footer-logo" href="#">
