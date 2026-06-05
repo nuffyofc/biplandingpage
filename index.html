@@ -694,17 +694,56 @@ footer p { font-size:12px; color:rgba(255,255,255,0.25); }
 
 <!-- MOCKUP LANDING PAGE MATERIAL -->
 <section style="background:var(--white); text-align:center; padding:60px 48px;">
-  <div style="max-width:1060px; margin:0 auto;">
+  <div style="max-width:900px; margin:0 auto;">
     <span class="section-label">Design Assets</span>
     <h2 class="section-title" style="margin-bottom:36px">Mockup Landing Page Material</h2>
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px;">
-      <img src="landing01.png" alt="Landing Mockup 1" style="width:100%; border-radius:var(--radius); box-shadow:0 12px 48px rgba(15,22,40,0.12);">
-      <img src="landing02.png" alt="Landing Mockup 2" style="width:100%; border-radius:var(--radius); box-shadow:0 12px 48px rgba(15,22,40,0.12);">
-      <img src="landing03.png" alt="Landing Mockup 3" style="width:100%; border-radius:var(--radius); box-shadow:0 12px 48px rgba(15,22,40,0.12);">
-      <img src="landing04.png" alt="Landing Mockup 4" style="width:100%; border-radius:var(--radius); box-shadow:0 12px 48px rgba(15,22,40,0.12);">
+    <div style="position:relative; display:flex; align-items:center; gap:16px;">
+      <button id="prevBtn" style="flex-shrink:0; width:44px; height:44px; border-radius:50%; border:none; background:var(--navy); color:var(--white); font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:.2s; box-shadow:0 4px 16px rgba(0,0,0,0.15);">&#8592;</button>
+      <div style="flex:1; overflow:hidden; border-radius:var(--radius); box-shadow:0 12px 48px rgba(15,22,40,0.12);">
+        <a id="slideLink" href="landing01.png" target="_blank" rel="noopener">
+          <img id="slideImg" src="landing01.png" alt="Landing Mockup 1" style="width:100%; display:block; cursor:zoom-in;">
+        </a>
+      </div>
+      <button id="nextBtn" style="flex-shrink:0; width:44px; height:44px; border-radius:50%; border:none; background:var(--navy); color:var(--white); font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:.2s; box-shadow:0 4px 16px rgba(0,0,0,0.15);">&#8594;</button>
+    </div>
+    <div style="display:flex; justify-content:center; gap:8px; margin-top:16px;">
+      <span class="dot" data-index="0" style="width:10px; height:10px; border-radius:50%; background:var(--orange); cursor:pointer; transition:.2s;"></span>
+      <span class="dot" data-index="1" style="width:10px; height:10px; border-radius:50%; background:var(--muted); cursor:pointer; transition:.2s;"></span>
+      <span class="dot" data-index="2" style="width:10px; height:10px; border-radius:50%; background:var(--muted); cursor:pointer; transition:.2s;"></span>
+      <span class="dot" data-index="3" style="width:10px; height:10px; border-radius:50%; background:var(--muted); cursor:pointer; transition:.2s;"></span>
     </div>
   </div>
 </section>
+<script>
+  (function(){
+    var slides = ["landing01.png","landing02.png","landing03.png","landing04.png"];
+    var alts = ["Landing Mockup 1","Landing Mockup 2","Landing Mockup 3","Landing Mockup 4"];
+    var current = 0;
+    var img = document.getElementById("slideImg");
+    var link = document.getElementById("slideLink");
+    var dots = document.querySelectorAll(".dot");
+    function showSlide(i) {
+      current = i;
+      img.src = slides[i];
+      img.alt = alts[i];
+      link.href = slides[i];
+      dots.forEach(function(d, idx) {
+        d.style.background = idx === i ? "var(--orange)" : "var(--muted)";
+      });
+    }
+    document.getElementById("prevBtn").addEventListener("click", function() {
+      showSlide((current - 1 + slides.length) % slides.length);
+    });
+    document.getElementById("nextBtn").addEventListener("click", function() {
+      showSlide((current + 1) % slides.length);
+    });
+    dots.forEach(function(d) {
+      d.addEventListener("click", function() {
+        showSlide(parseInt(this.getAttribute("data-index")));
+      });
+    });
+  })();
+</script>
 
 <!-- FOOTER -->
 <footer>
