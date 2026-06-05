@@ -362,6 +362,16 @@ footer p { font-size:12px; color:rgba(255,255,255,0.25); }
   from { opacity:0; transform:translateY(20px); }
   to { opacity:1; transform:none; }
 }
+@keyframes gentleJump {
+  0%, 100% { transform:translateY(0); }
+  25% { transform:translateY(-6px); }
+  50% { transform:translateY(0); }
+  75% { transform:translateY(-3px); }
+}
+.jump-btn {
+  animation: gentleJump 1s ease-in-out infinite;
+  animation-delay: 5s;
+}
 .reveal { opacity:0; transform:translateY(26px); transition:opacity .6s ease, transform .6s ease; }
 .reveal.visible { opacity:1; transform:none; }
 
@@ -422,7 +432,7 @@ footer p { font-size:12px; color:rgba(255,255,255,0.25); }
     <h1>Your <em>Erasmus journey,</em><br>all in one place</h1>
     <p class="hero-sub">Track credits, connect with fellow students, discover local tips and never miss a deadline.</p>
     <div class="hero-ctas">
-      <a href="https://bippy-product-development-roadmap.vercel.app/" style="text-decoration:none"><button class="btn-hero-orange">Get started — it's free</button></a>
+      <a href="https://bippy-product-development-roadmap.vercel.app/" style="text-decoration:none"><button class="btn-hero-orange jump-btn">Get started — it's free</button></a>
       <button class="btn-hero-outline">▶&nbsp; Watch demo</button>
     </div>
     <div class="hero-stats">
@@ -678,7 +688,7 @@ footer p { font-size:12px; color:rgba(255,255,255,0.25); }
   <h2>Your city is waiting.<br><em>Don't arrive unprepared.</em></h2>
   <p>Join 4,200+ students already using Bippy to make the most of their Erasmus.</p>
   <div class="cta-btns">
-    <a href="https://bippy-product-development-roadmap.vercel.app/" style="text-decoration:none"><button class="btn-white">Get started free →</button></a>
+    <a href="https://bippy-product-development-roadmap.vercel.app/" style="text-decoration:none"><button class="btn-white jump-btn">Get started free →</button></a>
     <button class="btn-outline-white">Talk to sales</button>
   </div>
 </section>
