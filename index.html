@@ -368,12 +368,51 @@ footer p { font-size:12px; color:rgba(255,255,255,0.25); }
   50% { transform:translateY(0); }
   75% { transform:translateY(-3px); }
 }
-.jump-btn {
-  animation: gentleJump 1s ease-in-out infinite;
-  animation-delay: 5s;
+.jump-anim {
+  animation: gentleJump 1s ease-in-out;
 }
 .reveal { opacity:0; transform:translateY(26px); transition:opacity .6s ease, transform .6s ease; }
 .reveal.visible { opacity:1; transform:none; }
+
+/* ─── GLASS HOVER ─── */
+.glass-hover {
+  position: relative; overflow: hidden;
+  transition: all .3s ease;
+}
+.glass-hover::before {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+  opacity:0; transition:opacity .3s ease; pointer-events:none; border-radius:inherit;
+}
+.glass-hover:hover::before { opacity:1; }
+.glass-hover:hover {
+  backdrop-filter:blur(8px);
+  box-shadow:0 8px 32px rgba(255,255,255,0.1);
+}
+
+/* ─── TOGGLE TABS ─── */
+.toggle-btn {
+  width:100%; max-width:420px;
+  background: linear-gradient(135deg, rgba(15,22,40,0.04), rgba(245,166,35,0.08));
+  border:1px solid rgba(245,166,35,0.3);
+  border-radius:16px; padding:18px 32px;
+  cursor:pointer; font-family:var(--font); font-size:18px; font-weight:700;
+  color:var(--navy); transition:all .3s ease;
+  backdrop-filter:blur(8px);
+  box-shadow:0 4px 20px rgba(245,166,35,0.12);
+}
+.toggle-btn:hover {
+  background: linear-gradient(135deg, rgba(15,22,40,0.07), rgba(245,166,35,0.18));
+  border-color:var(--orange);
+  transform:translateY(-3px);
+  box-shadow:0 10px 32px rgba(245,166,35,0.25);
+}
+
+/* ─── PARTICLE CANVAS ─── */
+#particleCanvas {
+  position:absolute; inset:0; z-index:1;
+  pointer-events:none;
+}
 
 /* ─── RESPONSIVE ─── */
 @media(max-width:900px) {
@@ -418,8 +457,8 @@ footer p { font-size:12px; color:rgba(255,255,255,0.25); }
     <li><a href="#stories">Stories</a></li>
   </ul>
   <div class="nav-actions">
-    <button class="btn-ghost-nav">Sign in</button>
-    <button class="btn-orange-nav">Join free →</button>
+    <button class="btn-ghost-nav glass-hover">Sign in</button>
+    <button class="btn-orange-nav glass-hover">Join free →</button>
   </div>
 </nav>
 
@@ -427,13 +466,14 @@ footer p { font-size:12px; color:rgba(255,255,255,0.25); }
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
+  <canvas id="particleCanvas"></canvas>
   <div class="hero-content">
     <div class="hero-badge">✈️ &nbsp; BIP Erasmus 2025</div>
     <h1>Your <em>Erasmus journey,</em><br>all in one place</h1>
     <p class="hero-sub">Track credits, connect with fellow students, discover local tips and never miss a deadline.</p>
     <div class="hero-ctas">
-      <a href="https://bippy-product-development-roadmap.vercel.app/" style="text-decoration:none"><button class="btn-hero-orange jump-btn">Get started — it's free</button></a>
-      <a href="#demo-section" style="text-decoration:none"><button class="btn-hero-outline">▶&nbsp; Watch demo</button></a>
+      <a href="https://bippy-product-development-roadmap.vercel.app/" style="text-decoration:none"><button id="getStartedBtn" class="btn-hero-orange jump-btn glass-hover">Get started — it's free</button></a>
+      <a href="#demo-section" style="text-decoration:none"><button id="watchDemoBtn" class="btn-hero-outline glass-hover">▶&nbsp; Watch demo</button></a>
     </div>
     <div class="hero-stats">
       <div class="stat"><div class="stat-num">4,200+</div><div class="stat-label">Students</div></div>
@@ -622,7 +662,7 @@ footer p { font-size:12px; color:rgba(255,255,255,0.25); }
           </div>
         </div>
       </div>
-      <button class="btn-b2b">Partner with Bippy →</button>
+      <button class="btn-b2b glass-hover">Partner with Bippy →</button>
     </div>
     <div class="b2b-dashboard reveal">
       <div class="b2b-dash-title">📈 Merchant performance</div>
@@ -688,14 +728,15 @@ footer p { font-size:12px; color:rgba(255,255,255,0.25); }
   <h2>Your city is waiting.<br><em>Don't arrive unprepared.</em></h2>
   <p>Join 4,200+ students already using Bippy to make the most of their Erasmus.</p>
   <div class="cta-btns">
-    <a href="https://bippy-product-development-roadmap.vercel.app/" style="text-decoration:none"><button class="btn-white jump-btn">Get started free →</button></a>
-    <button class="btn-outline-white">Talk to sales</button>
+    <a href="https://bippy-product-development-roadmap.vercel.app/" style="text-decoration:none"><button class="btn-white jump-btn glass-hover">Get started free →</button></a>
+    <button class="btn-outline-white glass-hover">Talk to sales</button>
   </div>
 </section>
 
 <!-- BUSINESS MODEL CANVAS -->
 <section style="background:var(--offwhite); text-align:center; padding:60px 48px;">
-  <div style="max-width:1060px; margin:0 auto;">
+  <button onclick="toggleCollapsible('bmcContent', this)" class="toggle-btn glass-hover">&#9654; Business Model Canvas</button>
+  <div id="bmcContent" style="display:none; max-width:1060px; margin:36px auto 0;">
     <span class="section-label">Business Model</span>
     <h2 class="section-title" style="margin-bottom:36px">Business Model Canvas</h2>
     <img src="canvas.png" alt="Business Model Canvas" style="width:100%; max-width:900px; border-radius:var(--radius); box-shadow:0 12px 48px rgba(15,22,40,0.12);">
@@ -704,7 +745,8 @@ footer p { font-size:12px; color:rgba(255,255,255,0.25); }
 
 <!-- MOCKUP LANDING PAGE MATERIAL -->
 <section style="background:var(--white); text-align:center; padding:60px 48px;">
-  <div style="max-width:900px; margin:0 auto;">
+  <button onclick="toggleCollapsible('mockupContent', this)" class="toggle-btn glass-hover">&#9654; Mockup Landing Page Material</button>
+  <div id="mockupContent" style="display:none; max-width:900px; margin:36px auto 0;">
     <span class="section-label">Design Assets</span>
     <h2 class="section-title" style="margin-bottom:36px">Mockup Landing Page Material</h2>
     <div style="position:relative; display:flex; align-items:center; gap:16px;">
@@ -723,6 +765,7 @@ footer p { font-size:12px; color:rgba(255,255,255,0.25); }
       <span class="dot" data-index="3" style="width:10px; height:10px; border-radius:50%; background:var(--muted); cursor:pointer; transition:.2s;"></span>
     </div>
   </div>
+</div>
 </section>
 <script>
   (function(){
@@ -752,12 +795,24 @@ footer p { font-size:12px; color:rgba(255,255,255,0.25); }
         showSlide(parseInt(this.getAttribute("data-index")));
       });
     });
+    var auto = setInterval(function() {
+      showSlide((current + 1) % slides.length);
+    }, 4000);
+    document.getElementById("prevBtn").addEventListener("mouseenter", function() { clearInterval(auto); });
+    document.getElementById("nextBtn").addEventListener("mouseenter", function() { clearInterval(auto); });
+    document.getElementById("prevBtn").addEventListener("mouseleave", function() {
+      auto = setInterval(function() { showSlide((current + 1) % slides.length); }, 4000);
+    });
+    document.getElementById("nextBtn").addEventListener("mouseleave", function() {
+      auto = setInterval(function() { showSlide((current + 1) % slides.length); }, 4000);
+    });
   })();
 </script>
 
 <!-- DEMO SLIDESHOW -->
 <section id="demo-section" style="background:var(--offwhite); text-align:center; padding:60px 48px;">
-  <div style="max-width:900px; margin:0 auto;">
+  <button onclick="toggleCollapsible('demoContent', this)" class="toggle-btn glass-hover">&#9654; See Demo</button>
+  <div id="demoContent" style="display:none; max-width:900px; margin:36px auto 0;">
     <span class="section-label">App Preview</span>
     <h2 class="section-title" style="margin-bottom:36px">See Demo</h2>
     <div style="position:relative; display:flex; align-items:center; gap:16px;">
@@ -771,11 +826,12 @@ footer p { font-size:12px; color:rgba(255,255,255,0.25); }
     </div>
     <div id="demoDots" style="display:flex; justify-content:center; gap:8px; margin-top:16px; flex-wrap:wrap;"></div>
   </div>
+</div>
 </section>
 <script>
   (function(){
-    var demos = ["demo-student-app.png","demo-admin-panel.png","demo-verification-gate.png","demo-onboarding.png","demo-city-guide.png","demo-discount-locker.png","demo-connect.png","demo-events.png","demo-insider.png","demo-overview.png"];
-    var demoAlts = ["Student App","Admin Panel","Verification Gate","Onboarding","City Guide","Discount Locker","Connect","Events","Insider","Overview"];
+    var demos = ["demo-student-app.png","demo-admin-panel.png","demo-onboarding.png","demo-city-guide.png","demo-discount-locker.png","demo-connect.png","demo-events.png","demo-insider.png","demo-overview.png","demo-acceptancepng.png","demo-citycms.png","demo-moderation.png","demo-analytics.png","demo-ambassador.png"];
+    var demoAlts = ["Student App","Admin Panel","Onboarding","City Guide","Discount Locker","Connect","Events","Insider","Overview","Acceptance","City CMS","Moderation","Analytics","Ambassador"];
     var demoCurrent = 0;
     var demoImg = document.getElementById("demoSlideImg");
     var demoLink = document.getElementById("demoSlideLink");
@@ -802,6 +858,17 @@ footer p { font-size:12px; color:rgba(255,255,255,0.25); }
     });
     document.getElementById("demoNextBtn").addEventListener("click", function() {
       showDemo((demoCurrent + 1) % demos.length);
+    });
+    var demoAuto = setInterval(function() {
+      showDemo((demoCurrent + 1) % demos.length);
+    }, 3000);
+    document.getElementById("demoPrevBtn").addEventListener("mouseenter", function() { clearInterval(demoAuto); });
+    document.getElementById("demoNextBtn").addEventListener("mouseenter", function() { clearInterval(demoAuto); });
+    document.getElementById("demoPrevBtn").addEventListener("mouseleave", function() {
+      demoAuto = setInterval(function() { showDemo((demoCurrent + 1) % demos.length); }, 3000);
+    });
+    document.getElementById("demoNextBtn").addEventListener("mouseleave", function() {
+      demoAuto = setInterval(function() { showDemo((demoCurrent + 1) % demos.length); }, 3000);
     });
   })();
 </script>
@@ -841,6 +908,126 @@ footer p { font-size:12px; color:rgba(255,255,255,0.25); }
     });
   }, { threshold: 0.1 });
   els.forEach(el => obs.observe(el));
+
+  function toggleCollapsible(id, btn) {
+    var el = document.getElementById(id);
+    if (el.style.display === 'none') {
+      el.style.display = 'block';
+      btn.innerHTML = '&#9660; ' + btn.textContent.slice(2);
+    } else {
+      el.style.display = 'none';
+      btn.innerHTML = '&#9654; ' + btn.textContent.slice(2);
+    }
+  }
+
+  /* ─── JUMP ON LOAD + EVERY 5S ─── */
+  (function(){
+    var btn = document.getElementById('getStartedBtn');
+    if (!btn) return;
+    function triggerJump() {
+      btn.classList.remove('jump-anim');
+      void btn.offsetWidth;
+      btn.classList.add('jump-anim');
+    }
+    triggerJump();
+    setInterval(triggerJump, 5000);
+  })();
+
+  /* ─── HOVER PARTICLES ─── */
+  (function(){
+    var btns = [
+      document.getElementById('getStartedBtn'),
+      document.getElementById('watchDemoBtn')
+    ];
+    var hero = document.querySelector('.hero');
+    var colors = ['#4ECDC4', '#F5A623', '#FFFFFF'];
+    btns.forEach(function(btn) {
+      if (!btn || !hero) return;
+      var activeDots = [];
+      btn.addEventListener('mouseenter', function(e) {
+        activeDots.forEach(function(d) { if (d.parentNode) d.remove(); });
+        activeDots = [];
+        var heroRect = hero.getBoundingClientRect();
+        var cx = e.clientX - heroRect.left;
+        var cy = e.clientY - heroRect.top;
+        for (var i = 0; i < 8; i++) {
+          (function(idx) {
+            setTimeout(function() {
+              var dot = document.createElement('div');
+              dot.style.cssText = 'position:absolute;width:5px;height:5px;border-radius:50%;pointer-events:none;z-index:5;box-shadow:0 0 6px currentColor;';
+              dot.style.color = colors[Math.floor(Math.random() * colors.length)];
+              dot.style.background = 'currentColor';
+              dot.style.left = cx + 'px';
+              dot.style.top = cy + 'px';
+              hero.appendChild(dot);
+              activeDots.push(dot);
+              var angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.2;
+              var dist = 50 + Math.random() * 90;
+              var dx = Math.cos(angle) * dist;
+              var dy = Math.sin(angle) * dist;
+              var start = Date.now();
+              function anim() {
+                var t = (Date.now() - start) / 500;
+                if (t >= 1) { dot.remove(); return; }
+                dot.style.left = (cx + dx * t) + 'px';
+                dot.style.top = (cy + dy * t + 90 * t * t) + 'px';
+                dot.style.opacity = Math.max(0, 1 - t * 1.3);
+                dot.style.transform = 'scale(' + (1 - t * 0.6) + ')';
+                requestAnimationFrame(anim);
+              }
+              anim();
+            }, idx * 25);
+          })(i);
+        }
+      });
+    });
+  })();
+
+  /* ─── BACKGROUND PARTICLE SYSTEM ─── */
+  (function(){
+    var canvas = document.getElementById('particleCanvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var W, H;
+    function resize() {
+      var hero = canvas.parentElement;
+      W = canvas.width = hero.offsetWidth;
+      H = canvas.height = hero.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    var particles = [];
+    var COUNT = 60;
+    var colors = ['rgba(78,205,196,', 'rgba(245,166,35,', 'rgba(255,255,255,'];
+    for (var i = 0; i < COUNT; i++) {
+      particles.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: 1.5 + Math.random() * 3,
+        dx: (Math.random() - 0.5) * 0.4,
+        dy: -0.2 - Math.random() * 0.6,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        alpha: 0.15 + Math.random() * 0.35
+      });
+    }
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < COUNT; i++) {
+        var p = particles[i];
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
+        if (p.x < -10) p.x = W + 10;
+        if (p.x > W + 10) p.x = -10;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color + p.alpha + ')';
+        ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
 </script>
 </body>
 </html>
